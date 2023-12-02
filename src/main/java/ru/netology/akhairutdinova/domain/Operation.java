@@ -1,16 +1,17 @@
 package ru.netology.akhairutdinova.domain;
 
+import ru.netology.akhairutdinova.enums.Currency;
 import ru.netology.akhairutdinova.interfaces.ConsolePrintable;
 
 public class Operation implements ConsolePrintable {
     private int id;
     private int sum;
-    private String currency;
+    private Currency currency;
     private String merchant;
 
     //<editor-fold desc="Constructors">
 
-    public Operation (int ID, int SUM, String CURRENCY, String MERCHANT) {
+    public Operation (int ID, int SUM, Currency CURRENCY, String MERCHANT) {
         this.id = ID;
         this.sum = SUM;
         this.currency = CURRENCY;
@@ -18,7 +19,7 @@ public class Operation implements ConsolePrintable {
     }
     public Operation () {
         this.sum = 0;
-        this.currency = "RUB";
+        this.currency = Currency.RUB;
         this.merchant = "REST API";
     }
 
@@ -61,7 +62,7 @@ public class Operation implements ConsolePrintable {
         return sum;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
@@ -77,7 +78,7 @@ public class Operation implements ConsolePrintable {
         this.sum = sum;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

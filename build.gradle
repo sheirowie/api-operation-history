@@ -6,4 +6,14 @@ repositories {
 }
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    implementation 'org.springframework:spring-context:5.3.23'
+}
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.netology.akhairutdinova.MainApp'
+    }
 }

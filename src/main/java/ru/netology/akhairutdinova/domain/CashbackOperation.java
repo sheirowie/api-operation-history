@@ -1,5 +1,6 @@
 package ru.netology.akhairutdinova.domain;
 
+import ru.netology.akhairutdinova.enums.Currency;
 import ru.netology.akhairutdinova.interfaces.ConsolePrintable;
 
 public class CashbackOperation extends Operation implements ConsolePrintable {
@@ -7,7 +8,7 @@ public class CashbackOperation extends Operation implements ConsolePrintable {
 
     //<editor-fold desc="Constructor, getters, setters">
 
-    public CashbackOperation(int ID, int SUM, String CURRENCY, String MERCHANT, double PERCENTAGE) {
+    public CashbackOperation(int ID, int SUM, Currency CURRENCY, String MERCHANT, double PERCENTAGE) {
         super(ID, SUM, CURRENCY, MERCHANT);
         cashbackAmount = (int)Math.round(getSum() * PERCENTAGE);
     }

@@ -1,12 +1,13 @@
 package ru.netology.akhairutdinova.domain;
 
+import ru.netology.akhairutdinova.enums.Currency;
 import ru.netology.akhairutdinova.interfaces.ConsolePrintable;
 
 public class LoanOperation extends Operation implements ConsolePrintable {
     private int loanId;
 
     //<editor-fold desc="Constructor, getters, setters">
-    public LoanOperation(int ID, int SUM, String CURRENCY, String MERCHANT, double PERCENTAGE) {
+    public LoanOperation(int ID, int SUM, Currency CURRENCY, String MERCHANT, double PERCENTAGE) {
         super(ID, SUM, CURRENCY, MERCHANT);
         loanId = (int)Math.round(PERCENTAGE);
     }
