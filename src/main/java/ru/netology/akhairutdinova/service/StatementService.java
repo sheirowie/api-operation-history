@@ -1,11 +1,13 @@
 package ru.netology.akhairutdinova.service;
 
+import org.springframework.stereotype.Component;
 import ru.netology.akhairutdinova.domain.Customer;
 import ru.netology.akhairutdinova.domain.Operation;
 import ru.netology.akhairutdinova.enums.Currency;
 
 import java.util.*;
 
+@Component
 public class StatementService {
     private final Map<Integer, List<Operation>> storage = new HashMap<>();
 

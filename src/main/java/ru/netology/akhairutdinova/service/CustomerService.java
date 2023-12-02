@@ -1,9 +1,11 @@
 package ru.netology.akhairutdinova.service;
 
+import org.springframework.stereotype.Component;
 import ru.netology.akhairutdinova.domain.*;
 
 import java.util.*;
 
+@Component
 public class CustomerService {
     private static final List<Customer> storage = new ArrayList<>();
     public CustomerService ( ) { }

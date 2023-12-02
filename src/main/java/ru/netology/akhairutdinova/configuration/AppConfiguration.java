@@ -15,6 +15,7 @@ public class AppConfiguration {
         return new CustomerService();
     }
 
+    @Bean
     public AsyncInputOperationService asyncInputOperationService(StatementService statementService) {
         return new AsyncInputOperationService(statementService);
     }

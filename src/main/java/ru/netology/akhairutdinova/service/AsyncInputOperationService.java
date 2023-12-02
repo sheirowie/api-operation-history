@@ -1,14 +1,18 @@
 package ru.netology.akhairutdinova.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.netology.akhairutdinova.domain.*;
 
 import java.util.*;
 
+@Component
 public class AsyncInputOperationService {
-    private final StatementService statementService;
+    private StatementService statementService;
     private Queue<Operation> operationQueue = new LinkedList<>();
     private Queue<Integer> customerIdQueue = new LinkedList<>();
 
+    @Autowired
     public AsyncInputOperationService(StatementService statementService) { this.statementService = statementService; }
 
     public boolean offerOperation(int customerId, Operation operation) {
