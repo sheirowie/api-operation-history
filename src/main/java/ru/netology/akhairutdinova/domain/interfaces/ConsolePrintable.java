@@ -1,4 +1,4 @@
-package ru.netology.akhairutdinova.interfaces;
+package ru.netology.akhairutdinova.domain.interfaces;
 
 public interface ConsolePrintable {
     void printToConsole();

@@ -1,44 +1,40 @@
 package ru.netology.akhairutdinova.service;
 
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.netology.akhairutdinova.domain.*;
+import ru.netology.akhairutdinova.domain.Customer;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.*;
-
+@RequiredArgsConstructor
 @Component
 public class CustomerService {
-    private static final List<Customer> storage = new ArrayList<>();
-    public CustomerService ( ) { }
+    private final List<Customer> storage = new ArrayList<>();
 
-    public void inputCustomers(Scanner scanner) {
-        int customerID = 0;
-        while (true) {
-            System.out.println("Name: ");
-            String name = scanner.nextLine();
-            storage.add(new Customer(customerID, name));
-            customerID++;
+    @PostConstruct
+    public void initStorage() {
+        storage.add(new Customer(1,"Spring"));
+        storage.add(new Customer(2, "Boot"));
+    }
 
-            System.out.println("Do you want to add another customer? Yes/No");
-            String response = scanner.nextLine();
-            if (response.equals("No")) {
-                break;
-            }
+    public List<Customer> getStorage(){
+        return storage;
+    }
+
+    public Customer getCustomer(int id) {
+        return storage.stream()
+                .filter(customer -> customer.getId() == id)
+                .findFirst().orElse(null);
+    }
+
+    public void setCustomer(Customer cstmer) {
+        Customer customer = getCustomer(cstmer.getId());
+        if (customer != null) {
+            int index = storage.indexOf(customer);
+            storage.get(index).setName(cstmer.getName());
+            return;
         }
+        storage.add(cstmer);
     }
-
-    public Customer getCustomer(int position) {
-        try {
-            Customer customer = storage.get(position);
-            return customer;
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-    }
-
-    public void addCustomer(Customer customer) {
-            storage.add(customer);
-
-    }
-
-
 }

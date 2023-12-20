@@ -1,0 +1,4 @@
+operations.processing:
+  timeout: 5000
+  operationsMaxCount: 100000
+
