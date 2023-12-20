@@ -1,25 +1,28 @@
 package ru.netology.akhairutdinova.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.netology.akhairutdinova.domain.*;
+import ru.netology.akhairutdinova.configuration.OperationProperties;
+import ru.netology.akhairutdinova.domain.operations.Operation;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import java.util.*;
-
+@RequiredArgsConstructor
 @Component
 public class AsyncInputOperationService {
-    private StatementService statementService;
-    private Queue<Operation> operationQueue = new LinkedList<>();
-    private Queue<Integer> customerIdQueue = new LinkedList<>();
+    private final Queue<Operation> operationQueue = new LinkedList<>();
+    private final StatementService statementService;
+    private final OperationProperties operationProperties;
 
-    @Autowired
-    public AsyncInputOperationService(StatementService statementService) { this.statementService = statementService; }
-
-    public boolean offerOperation(int customerId, Operation operation) {
-        return operationQueue.offer(operation) && customerIdQueue.offer(customerId);
-
+    @PostConstruct
+    public void init(){
+        this.startAsyncOperationProcessing();
     }
 
+    public boolean offerOperation(Operation operation) {
+        return operationQueue.offer(operation);
+    }
     public void startAsyncOperationProcessing() {
         Thread t = new Thread() {
             @Override
@@ -33,16 +36,16 @@ public class AsyncInputOperationService {
     private void processQueue() {
         while (true) {
             Operation operation = operationQueue.poll();
-            Integer customerId = customerIdQueue.poll();
             if (operation == null) {
                 try {
-                    Thread.sleep(1_000);
+                    System.out.println("No operations currently processing.");
+                    Thread.sleep(operationProperties.getTimeout());
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                System.out.println("Processing operation: " + operation);
-                statementService.saveCustomerOperation(customerId, operation);
+                System.out.println("Processing operation:" + operation);
+                statementService.addOperation(operation);
             }
         }
     }
