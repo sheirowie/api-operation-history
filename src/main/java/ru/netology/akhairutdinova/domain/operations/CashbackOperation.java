@@ -6,7 +6,6 @@ import ru.netology.akhairutdinova.domain.interfaces.ConsolePrintable;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 public class CashbackOperation extends Operation implements ConsolePrintable {
     private int cashbackAmount;
 

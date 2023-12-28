@@ -16,50 +16,38 @@ public class StatementService {
     private final OperationProperties operationProperties;
     private final Map<Integer, List<Operation>> storage = new HashMap<>();
 
-    private int getIndex(int operationId){
-        int customerId = operationId / operationProperties.getOperationsMaxCount();
-        List<Operation> list = getOperations(customerId);
-        return list.stream()
-                .filter(operation -> operation.getId() == operationId)
-                .map(operation -> operation.getId() % operationProperties.getOperationsMaxCount())
-                .findFirst().orElse(-1);
-    }
-
-    public List<Operation> getOperations(int clientId){
-        if (customerService.getCustomer(clientId) == null) {
+    public List<Operation> getOperations(int customerId){
+        if (customerService.getCustomer(customerId) == null) {
             return null;
         }
-        List<Operation> operations = storage.get(clientId);
+        List<Operation> operations = storage.get(customerId);
         if (operations == null) {
-            storage.put(clientId, new ArrayList<>());
-            return storage.get(clientId);
+            storage.put(customerId, new ArrayList<>());
+            return storage.get(customerId);
         }
         return operations;
     }
 
-    public void addOperation(Operation operation){
+    public void setOperation (Operation operation) {
         Customer customer = customerService.getCustomer(operation.getCustomerId());
-        if (customer == null) {
-            return;
-        }
-        List<Operation> operationsOfCustomer = getOperations(operation.getCustomerId());
-        operationsOfCustomer.add(operation);
-        storage.put(operation.getCustomerId(), operationsOfCustomer);
+        if (customer == null) return;
+
+        List<Operation> customerOperations = getOperations(operation.getCustomerId());
+        customerOperations.add(operation);
+        storage.put(operation.getCustomerId(), customerOperations);
     }
 
     public boolean deleteOperation(int operationId) {
         try {
-            int customerId = operationId / operationProperties.getOperationsMaxCount();
-            List<Operation> customerOperations = getOperations(customerId);
-            customerOperations.remove(operationId % operationProperties.getOperationsMaxCount());
-            customerOperations.stream().peek(operation -> {
-                 if (operation.getId() > operationId) {
-                     storage.get(customerId).get(getIndex(operation.getId())).setId(operation.getId()-1);
-                 }
-            });
-            return true;
-        }
-        catch (Exception e) {
+            for (int i = 0; i < storage.size(); i++) {
+                for (int j = 0; j < storage.get(i).size(); j++) {
+                    if (storage.get(i).get(j).getId() == operationId) {
+                        storage.get(i).remove(operationId);
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) {
             return false;
         }
     }

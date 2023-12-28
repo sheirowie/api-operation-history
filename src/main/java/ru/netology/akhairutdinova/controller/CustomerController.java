@@ -34,6 +34,6 @@ public class CustomerController {
     @PostMapping
     public void setCustomer(Customer customer){
         customerService.setCustomer(customer);
-        System.out.println("Added successfully.");
+        System.out.println("Customer is added.");
     }
 }

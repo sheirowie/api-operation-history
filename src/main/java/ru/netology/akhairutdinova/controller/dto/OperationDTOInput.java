@@ -10,6 +10,4 @@ public class OperationDTOInput {
     private final Currency currency;
     private final String merchant;
     private final int customerId;
-    private final Integer cashbackAmount;
-    private final String type;
 }

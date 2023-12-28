@@ -18,7 +18,7 @@ public class OperationController {
     private final OperationProperties operationProperties;
 
     @GetMapping("{id}")
-    public OperationsGetResponse getOperations(@PathVariable("id") int customerId){
+    public OperationsGetResponse getOperations(@PathVariable("id") int customerId) {
         if (statementService.getOperations(customerId) == null) {
             return null;
         }
@@ -29,24 +29,16 @@ public class OperationController {
         return new OperationsGetResponse(operationDTOS);
     }
     @PostMapping
-    public boolean  setOperation(OperationDTOInput operationInput){
+    public boolean setOperation(OperationDTOInput operationInput){
         int customerId = operationInput.getCustomerId();
         if (statementService.getOperations(customerId) == null) {
             return false;
         }
-        int operationId = customerId * operationProperties.getOperationsMaxCount() + statementService.getOperations(customerId).size();
-        if (operationInput.getType() == null){
-            asyncInputOperationService.offerOperation(new Operation(operationId, operationInput.getSum(),
-                    operationInput.getCurrency(), operationInput.getMerchant(), customerId));
-            return true;
-        }
-        if (operationInput.getType().equals("loan")) {
-            asyncInputOperationService.offerOperation(new LoanOperation(operationId, operationId,
-                    operationInput.getSum(), operationInput.getCurrency(), operationInput.getMerchant(), customerId));
-            return true;
-        }
-        asyncInputOperationService.offerOperation(new CashbackOperation(operationId, operationInput.getCashbackAmount(),
-                operationInput.getSum(), operationInput.getCurrency(), operationInput.getMerchant(), customerId));
+        int operationId = customerId * operationProperties.getOperationsMaxCount() +
+                statementService.getOperations(customerId).size();
+        asyncInputOperationService.offerOperation(new Operation(operationId, operationInput.getSum(),
+        operationInput.getCurrency(), operationInput.getMerchant(), customerId));
+        System.out.println("Operation is added.");
         return true;
     }
 

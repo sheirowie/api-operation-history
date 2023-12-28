@@ -36,9 +36,4 @@ public class LoanOperation extends Operation implements ConsolePrintable {
     public boolean equals(Object o) {
         return true;
     }
-
-    @Override
-    public int hashCode() {
-        return this.sum * 1337 + this.merchant.hashCode() * 1337;
-    }
 }

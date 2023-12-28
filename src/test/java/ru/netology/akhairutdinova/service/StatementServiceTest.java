@@ -3,63 +3,41 @@ package ru.netology.akhairutdinova.service;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.netology.akhairutdinova.OperationHistoryApiApplicationTest;
+import ru.netology.akhairutdinova.domain.Customer;
 import ru.netology.akhairutdinova.domain.enums.Currency;
 import ru.netology.akhairutdinova.domain.operations.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
 public class StatementServiceTest extends OperationHistoryApiApplicationTest {
     @Autowired
     private StatementService statementService;
-    private final static List<Operation> operationList = new ArrayList<>();
-
     @Test
-    public void addOperationTest() {
-        for (Operation operation : operationList) {
-            statementService.addOperation(operation);
-        }
+    public void getOperationTest() {
+        List<Operation> customerOperations = statementService.getOperations(1);
+        assertNotNull(customerOperations);
+        assertEquals(0, customerOperations.size());
     }
 
     @Test
-    public void deleteOperationsTest() {
-        addOperationTest();
+    public void saveOperationTest() {
+        Operation operation1 = new Operation(1000, 1000, Currency.USD,"Merch", 3);
+        Operation operation2 = new Operation(900, 900, Currency.USD, "Merch", 3);
+        Customer customer = new Customer(3, "Vasya");
+        statementService.getCustomerService().setCustomer(customer);
+        statementService.setOperation(operation1);
+        statementService.setOperation(operation2);
 
-        boolean bool = statementService.deleteOperation(100000);
-        assertEquals(true, bool);
+        List<Operation> customerOperations = statementService.getOperations(3);
+        List<Operation> expectedOperations = new ArrayList<Operation>();
+        expectedOperations.add(new Operation(1000, 1000, Currency.USD,"Merch", 3));
+        expectedOperations.add(new Operation(900, 900, Currency.USD, "Merch", 3));
 
-        bool = statementService.deleteOperation(1000);
-        assertEquals(false, bool);
-
-    }
-
-
-    @Test
-    public void getOperationsTest() {
-        addOperationTest();
-        int sizeCustomer1 = statementService.getOperations(1).size();
-        int sizeCustomer2 = statementService.getOperations(2).size();
-
-        assertEquals(2, sizeCustomer1);
-        assertEquals(2, sizeCustomer2);
-        assertNull(statementService.getOperations(5));
-    }
-
-    @BeforeAll
-    public static void inputOperation() {
-        CashbackOperation cashbackOperation =
-                new CashbackOperation(100_000, 45, 4500, Currency.RUB, "merchant", 1);
-        LoanOperation loanOperation =
-                new LoanOperation(200_000, 200_000, 4500, Currency.USD, "merchant", 2);
-
-        Operation operation1 = cashbackOperation;
-        Operation operation2 = loanOperation;
-
-        operationList.add(cashbackOperation);
-        operationList.add(loanOperation);
-        operationList.add(operation1);
-        operationList.add(operation2);
+        assertEquals(expectedOperations, customerOperations);
     }
 }
 

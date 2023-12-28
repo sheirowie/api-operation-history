@@ -2,6 +2,7 @@ package ru.netology.akhairutdinova.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.netology.akhairutdinova.configuration.OperationProperties;
 import ru.netology.akhairutdinova.domain.operations.Operation;
@@ -12,7 +13,9 @@ import java.util.Queue;
 @Component
 public class AsyncInputOperationService {
     private final Queue<Operation> operationQueue = new LinkedList<>();
+    @Autowired
     private final StatementService statementService;
+    @Autowired
     private final OperationProperties operationProperties;
 
     @PostConstruct
@@ -45,7 +48,7 @@ public class AsyncInputOperationService {
                 }
             } else {
                 System.out.println("Processing operation:" + operation);
-                statementService.addOperation(operation);
+                statementService.setOperation(operation);
             }
         }
     }

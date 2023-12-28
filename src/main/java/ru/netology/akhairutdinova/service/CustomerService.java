@@ -4,8 +4,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.netology.akhairutdinova.domain.Customer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
@@ -23,9 +22,12 @@ public class CustomerService {
     }
 
     public Customer getCustomer(int id) {
-        return storage.stream()
-                .filter(customer -> customer.getId() == id)
-                .findFirst().orElse(null);
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getId() == id) {
+                return storage.get(i);
+            }
+        }
+        return null;
     }
 
     public void setCustomer(Customer cstmer) {
